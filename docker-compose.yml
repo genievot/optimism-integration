@@ -32,7 +32,7 @@ services:
       - docker-compose.env
 
   deployer:
-    image: ethereumoptimism/deployer:${DEPLOYER_TAG:-latest}
+    image: ethereumoptimism/deployer:${DEPLOYER_TAG:-feat_audit-integrations}
     env_file:
       - docker-compose.env
     ports:
