@@ -37,6 +37,7 @@ GETH_L2_TAG=${GETH_L2_TAG:-latest}
 L1_CHAIN_TAG=${L1_CHAIN_TAG:-latest}
 INTEGRATION_TESTS_TAG=${INTEGRATION_TESTS_TAG:-latest}
 MESSAGE_RELAYER_TAG=${MESSAGE_RELAYER_TAG:-latest}
+DATA_TRANSPORT_LAYER_TAG=${DATA_TRANSPORT_LAYER_TAG:-latest}
 
 # Replace slash with underscore in tags
 DEPLOYER_TAG=$(echo $DEPLOYER_TAG | sed 's/\//_/g')
@@ -45,11 +46,14 @@ GETH_L2_TAG=$(echo $GETH_L2_TAG | sed 's/\//_/g')
 L1_CHAIN_TAG=$(echo $L1_CHAIN_TAG | sed 's/\//_/g')
 INTEGRATION_TESTS_TAG=$(echo $INTEGRATION_TESTS_TAG | sed 's/\//_/g')
 MESSAGE_RELAYER_TAG=$(echo $MESSAGE_RELAYER_TAG | sed 's/\//_/g')
+DATA_TRANSPORT_LAYER_TAG=$(echo $DATA_TRANSPORT_LAYER_TAG | sed 's/\//_/g')
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" > /dev/null && pwd )"
 
 function run {
+    local cmd
     cmd="docker-compose -f $DIR/$DOCKERFILE"
+    cmd="$cmd -f $DIR/docker-compose.env.yml"
     if [ -f "$DIR/optional/$PKGS-service.yml" ]; then
         cmd="$cmd -f $DIR/optional/$PKGS-service.yml"
     fi
@@ -64,11 +68,14 @@ function run {
     L1_CHAIN_TAG=$L1_CHAIN_TAG \
     INTEGRATION_TESTS_TAG=$INTEGRATION_TESTS_TAG \
     MESSAGE_RELAYER_TAG=$MESSAGE_RELAYER_TAG \
+    DATA_TRANSPORT_LAYER_TAG=$DATA_TRANSPORT_LAYER_TAG \
         $cmd
 }
 
 function clean {
+    local cmd
     cmd="docker-compose -f $DOCKERFILE"
+    cmd="$cmd -f $DIR/docker-compose.env.yml"
     if [ -f "$DIR/optional/$PKGS-service.yml" ]; then
         cmd="$cmd -f $DIR/optional/$PKGS-service.yml"
     fi
